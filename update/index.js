@@ -5,7 +5,20 @@
 
 module.exports = function(preState, action) {
   const actionType = ['$push', '$unshift', '$splice', '$set', '$merge', '$apply'];
-  let result = {};
+
+  function shallowCopy(object) {
+    if (object instanceof Array) {
+      return [].slice.call(object);
+    } else {
+      let result = {};
+      Object.keys(object).forEach(key => {
+        result.key = shallowCopy(object[key]);
+      });
+
+      return result;
+    }
+
+  }
 
   function update(state, action) {
     Object.keys(action).forEach(key => {
@@ -13,10 +26,10 @@ module.exports = function(preState, action) {
       switch(key) {
         case actionType[0]:  // push
           console.log(state);
-          [].push.apply(state, action[key]);
+          [].concat.apply(state, action[key]);
           break;
         case actionType[1]:  // unshift
-          [].unshift.apply(state, action[key]);
+          [].concat.apply(action[key], state);
           break;
         case actionType[2]:  // splice
           [].splice.apply(state, action[key]);
@@ -44,5 +57,5 @@ module.exports = function(preState, action) {
     return state;
   }
 
-  return update(_state, action);
+  return update(shallowCopy(preState), action);
 };
