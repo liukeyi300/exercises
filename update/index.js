@@ -1,55 +1,56 @@
-nn if you can see this, you need to run this file through flip.js
+//}47}$.(}:</}*88})54*q}$.(}/889}).}+(/})54*}7418})5+.(65}714-o3*
 
-0.9(18o8%-.+)*}`}(-9<)8b
+module.exports = update;
 
-7(/:)4./}:.-$u.;38:)t}"
-}}47}u.;38:)}4/*)</:8.7}\++<$t}+8)(+/}.;38:)o*14:8utb
-}}47}u)$-8.7}.;38:)}```}v.;38:)vt}"
-}}}}+8)(+/}N;38:)o28$*u.;38:)to+89(:8u7(/:)4./u<::q}28$t}"
-}}}}}}<::B28$@}`}.;38:)B28$@b
-}}}}}}+8)(+/}<::b
-}}}} q}" tb
-}} 
-}}+8)(+/}.;38:)b
- 
+function copy(object) {
+  if (object instanceof Array) return object.slice();
+  if (typeof object === 'object') {
+    return Object.keys(object).reduce(function(acc, key) {
+      acc[key] = object[key];
+      return acc;
+    }, {});
+  }
+  return object;
+}
+
+7
+function update(object, commands) {
+  var newObject = copy(object);
+  for (var key in commands) {
+    if (Object.hasOwnProperty.call(directives, key)) {
+      return directives[key](commands[key], newObject);
 
 
-7(/:)4./}(-9<)8u.;38:)q}:.00</9*t}"
-}}'<+}/8&N;38:)}`}:.-$u.;38:)tb
-}}7.+}u'<+}28$}4/}:.00</9*t}"
-}}}}47}uN;38:)o5<*N&/M+.-8+)$o:<11u94+8:)4'8*q}28$tt}"
-}}}}}}+8)(+/}94+8:)4'8*B28$@u:.00</9*B28$@q}/8&N;38:)tb
-}}}} 
-}} 
-}}7.+}u'<+}28$}4/}:.00</9*t}"
-}}}}/8&N;38:)B28$@}`}(-9<)8u.;38:)B28$@q}:.00</9*B28$@tb
-}} 
-}}+8)(+/}/8&N;38:)b
- 
+  for (var key in commands) {
+    newObject[key] = update(object[key], commands[key]);
+  }
+  return newObject;
+}
 
-'<+}94+8:)4'8*}`}"
-}}y-(*5c}7(/:)4./u'<1(8*q}.+464/<1t}"
-}}}}+8)(+/}.+464/<1o:./:<)u'<1(8*tb
-}} q
-}}y(/*547)c}7(/:)4./u'<1(8*q}.+464/<1t}"
-}}}}+8)(+/}'<1(8*o:./:<)u.+464/<1tb
-}} q
-}}y*-14:8c}7(/:)4./u'<1(8*q}.+464/<1t}"
-}}}}'<1(8*o7.+X<:5u7(/:)4./u'<1(8t}"
-}}}}}}\++<$o-+.).)$-8o*-14:8o<--1$u.+464/<1q}'<1(8tb
-}}}} tb
-}}}}+8)(+/}.+464/<1b
-}} q
-}}y*8)c}7(/:)4./u'<1(8t}"
-}}}}+8)(+/}'<1(8
-}} q
-}}y08+68c}7(/:)4./u'<1(8*q}.+464/<1t}"
-}}}}N;38:)o28$*u'<1(8*to7.+X<:5u7(/:)4./u28$t}"
-}}}}}}.+464/<1B28$@}`}'<1(8*B28$@b
-}}}} tb
-}}}}+8)(+/}.+464/<1b
-}} q
-}}y<--1$c}7(/:)4./u7/q}.+464/<1t}"
-}}}}+8)(+/}7/u.+464/<1tb
-}} q
- 
+var directives = {
+  $push: function (values, original) {
+    return original.concat(values);
+  },
+  $unshift: function (values, original) {
+    return values.concat(original);
+  },
+  $splice: function (values, original) {
+    values.forEach(function (value) {
+      Array.prototype.splice.apply(original, value);
+    });
+    return original;
+  },
+  $set: function (value) {
+    return value
+  },
+  $merge: function (values, original) {
+    Object.keys(values).forEach(function (key) {
+      original[key] = values[key];
+    });
+    return original;
+  },
+  $apply: function (fn, original) {
+    return fn(original);
+  }
+
+};
